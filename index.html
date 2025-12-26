@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Series Sorter</title>
+
+<style>
+*{box-sizing:border-box;}
+
+body{
+    margin:0;
+    font-family:system-ui,-apple-system,"Segoe UI",Arial;
+    background:#f2f4f8;
+}
+
+/* TOP */
+.dev-banner{
+    text-align:center;
+    padding:8px;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:2px;
+    color:#666;
+    background:#fff;
+}
+
+/* MAIN */
+.container{
+    padding:10px;
+    max-width:100%;
+}
+
+/* TITLE */
+h1{
+    font-size:16px;
+    text-align:center;
+    margin:6px 0 10px;
+    color:#222;
+}
+
+/* INPUT */
+textarea{
+    width:100%;
+    height:90px;
+    padding:10px;
+    font-size:13px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    outline:none;
+}
+
+/* BUTTON */
+.process-btn{
+    width:100%;
+    margin:10px 0;
+    padding:10px;
+    font-size:14px;
+    font-weight:700;
+    border:none;
+    border-radius:20px;
+    color:#fff;
+    background:linear-gradient(135deg,#ff512f,#dd2476);
+}
+
+/* OUTPUT ROW (ALWAYS HORIZONTAL) */
+.output{
+    display:flex;
+    gap:8px;
+}
+
+/* BOX */
+.box{
+    flex:1;
+    background:#fff;
+    border-radius:14px;
+    padding:8px;
+    box-shadow:0 6px 15px rgba(0,0,0,0.08);
+    display:flex;
+    flex-direction:column;
+}
+
+/* HEADER */
+.box-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:4px;
+}
+
+.box-header strong{
+    font-size:12px;
+}
+
+/* COPY */
+.copy-btn{
+    padding:4px 10px;
+    font-size:11px;
+    font-weight:700;
+    border:none;
+    border-radius:14px;
+    color:#fff;
+    background:linear-gradient(135deg,#11998e,#38ef7d);
+}
+
+/* OUTPUT TEXT */
+pre{
+    height:90px;
+    margin:0;
+    font-size:11px;
+    overflow-y:auto;
+    white-space:pre-wrap;
+    word-break:break-word;
+    color:#333;
+}
+
+/* SCROLLBAR */
+pre::-webkit-scrollbar{width:4px;}
+pre::-webkit-scrollbar-thumb{
+    background:#bbb;
+    border-radius:10px;
+}
+
+/* TOAST */
+.toast{
+    position:fixed;
+    bottom:14px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#333;
+    color:#fff;
+    padding:6px 14px;
+    border-radius:20px;
+    font-size:11px;
+    opacity:0;
+    transition:.3s;
+}
+.toast.show{opacity:1;}
+</style>
+</head>
+
+<body>
+
+<div class="dev-banner">DEVELOPED BY DHIRAJ</div>
+
+<div class="container">
+    <h1>Series Sorter</h1>
+
+    <textarea id="inputData" placeholder="Paste your data here"></textarea>
+
+    <button class="process-btn" onclick="processData()">Process</button>
+
+    <div class="output">
+        <div class="box">
+            <div class="box-header">
+                <strong>615</strong>
+                <button class="copy-btn" onclick="copyBox('series615')">Copy</button>
+            </div>
+            <pre id="series615"></pre>
+        </div>
+
+        <div class="box">
+            <div class="box-header">
+                <strong>100*</strong>
+                <button class="copy-btn" onclick="copyBox('series100')">Copy</button>
+            </div>
+            <pre id="series100"></pre>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast">Copied ✓</div>
+
+<script>
+function processData(){
+    const lines=inputData.value.split(/\r?\n/);
+    let s615=[],s100=[];
+    lines.forEach(l=>{
+        l=l.trim();
+        if(!l)return;
+        if(l.startsWith("615"))s615.push(l);
+        else if(l.startsWith("100"))s100.push(l);
+    });
+    series615.textContent=s615.join("\n");
+    series100.textContent=s100.join("\n");
+}
+
+function copyBox(id){
+    const el=document.getElementById(id);
+    if(!el.textContent.trim())return;
+    const t=document.createElement("textarea");
+    t.value=el.textContent;
+    t.style.position="fixed";
+    t.style.left="-9999px";
+    document.body.appendChild(t);
+    t.select();
+    document.execCommand("copy");
+    document.body.removeChild(t);
+    toast.classList.add("show");
+    setTimeout(()=>toast.classList.remove("show"),1000);
+}
+</script>
+
+</body>
+</html>
